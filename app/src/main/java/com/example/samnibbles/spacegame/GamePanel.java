@@ -21,6 +21,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
     //CLASSES
     private MainThread thread;
     private PlanetHandler planetHandler;
+    private PlayerObject playerObject;
 
     //SCALE CANVAS FOR DIFFERENT SIZED SCREENS
     private float scaleFactorX;
@@ -41,6 +42,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 
         //INITIALISE CLASSES
         planetHandler = new PlanetHandler();
+
     }
 
     @Override
@@ -70,6 +72,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         scaleFactorY = getHeight() /(Constants.HEIGHT * 1.f);
 
         //Initialise Class Scale Factors
+        playerObject = new PlayerObject(scaleFactorX, scaleFactorY);
 
         //START RUNNING THREAD
         thread.setRunning(true);
@@ -81,12 +84,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
         switch (event.getAction()) {
 
         }
-        //uiHandler.onTouchEvent(event);
+        playerObject.onTouchEvent(event);
         return true;
     }
 
     public void update() {
         planetHandler.update();
+        playerObject.update();
     }
 
     @Override
@@ -100,6 +104,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
             canvas.drawRect(new RectF(0, 0, Constants.WIDTH, Constants.HEIGHT), paint);
 
             planetHandler.draw(canvas);
+            playerObject.draw(canvas);
 
             canvas.restoreToCount(savedState);
         }
