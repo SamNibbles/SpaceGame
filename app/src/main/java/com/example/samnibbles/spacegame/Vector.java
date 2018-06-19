@@ -75,8 +75,15 @@ public class Vector {
 
     // Dot product of two vectors .....
 
-    public double dotProduct ( Vector v1 ) {
-        return this.x*v1.x + this.y*v1.y;
+    public Vector perp(Vector planet) {
+        Vector dis = this.sub(planet);
+
+        dis.x = dis.x * -1;
+        double pY = dis.y;
+        dis.y = dis.x;
+        dis.x = pY;
+
+        return new Vector(dis.x, dis.y).normalize();
     }
 }
 

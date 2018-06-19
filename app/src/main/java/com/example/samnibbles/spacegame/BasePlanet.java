@@ -13,42 +13,26 @@ public class BasePlanet {
 
     //Variables
     protected Bitmap image;
-
-    public Vector getPos() {
-        return pos;
-    }
-
-    public void setPos(Vector pos) {
-        this.pos = pos;
-    }
-
     protected Vector pos;
-    protected Vector dim;
     protected float radius;
-    protected float mass = 50;
-    protected double centreX;
-    protected double centreY;
+    protected int mass = 50;
     protected int color;
-    protected int G = 50;
-    protected double speed = 2;
+    protected int G = 100;
 
     public BasePlanet() {
 
     }
 
-    public Vector attract(PlanetObject planetObject) {
-        Vector force = this.pos.sub(planetObject.pos).normalize();
-        double distance = this.pos.sub(planetObject.pos).length();
-        double strength = G * this.mass * planetObject.mass * distance / Math.pow(Math.abs(distance),3);
+    public Vector attract(Vector objectPos, int objectMass) {
+        Vector force = this.pos.sub(objectPos).normalize();
+        double distance = this.pos.sub(objectPos).length();
+        double strength = G * this.mass * objectMass * distance / Math.pow(Math.abs(distance),3);
+        Math.min(Math.max(strength, 25), 5);
         force = force.mul(strength);
         return force;
     }
 
     public void update() {
-
-    }
-
-    public void onTouchEvent(MotionEvent event) {
 
     }
 

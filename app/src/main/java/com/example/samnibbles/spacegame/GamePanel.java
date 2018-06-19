@@ -90,6 +90,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback
 
     public void update() {
         planetHandler.update();
+
+        //Checks for first planet attraction
+        if (playerObject.isAttracted() == -1)
+            playerObject.setAttracted(planetHandler.inRange(playerObject.getPos()));
+
+        //Find force from currently attracted planet
+        Vector collisionForce = planetHandler.attraction(playerObject);
+        playerObject.applyForce(collisionForce);
+
         playerObject.update();
     }
 

@@ -11,24 +11,20 @@ import java.io.Console;
 
 public class PlanetObject extends BasePlanet {
 
-    public Vector getVel() {
-        return vel;
-    }
-
-    public void setVel(Vector vel) {
-        this.vel = vel;
-    }
-
     //Variables
     private Vector vel;
     private Vector acc;
 
-    public PlanetObject(int dis, float mass, float radius, int color) {
+    //GETS & SETS
+    public Vector getVel() {return vel;}
+    public void setVel(Vector vel) {this.vel = vel;}
+
+    public PlanetObject(int dis, int mass, float radius, int color) {
         this.pos = new Vector(Constants.WIDTH / 2 + dis, Constants.HEIGHT / 2 );
         this.acc = new Vector(0, 0);
         this.vel = new Vector(0,5).normalize();
 
-        double force = Math.sqrt((this.G * this.mass) / dis);
+        double force = Math.sqrt((Constants.GRAVITY * this.mass) / dis);
         this.vel = this.vel.mul(force);
 
         this.radius = radius;
@@ -46,9 +42,4 @@ public class PlanetObject extends BasePlanet {
         this.pos = this.pos.add(vel);
         acc = new Vector(0,0);
     }
-
-    public void onTouchEvent(MotionEvent event) {
-
-    }
-
 }
