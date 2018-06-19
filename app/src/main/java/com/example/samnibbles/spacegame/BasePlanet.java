@@ -17,7 +17,7 @@ public class BasePlanet {
     protected float radius;
     protected int mass = 50;
     protected int color;
-    protected int G = 50;
+    protected int G = 100;
 
     public BasePlanet() {
 
