@@ -14,10 +14,10 @@ public class PlayerObject {
     private Vector acc;
     private Vector vel;
     private int radius;
-    private int mass = 50;
+    private int mass = 10;
     private int color;
     private Vector targetPos;
-    private boolean attracted = false;
+    private int attracted = -1;
     private boolean move = false;
 
     //GETS AND SETS
@@ -27,8 +27,11 @@ public class PlayerObject {
     public int getMass() {return mass;}
     public void setMass(int mass) {this.mass = mass;}
 
-    public boolean isAttracted() {return attracted;}
-    public void setAttracted(boolean attracted) {this.attracted = attracted;}
+    public int isAttracted() {return attracted;}
+    public void setAttracted(int attracted) {this.attracted = attracted;}
+
+    public Vector getVel() {return vel;}
+    public void setVel(Vector vel) {this.vel = vel;}
 
     private float scaleX;
     private float scaleY;
@@ -51,7 +54,7 @@ public class PlayerObject {
     }
 
     public void update() {
-        if (attracted) {
+        if (attracted != -1) {
             this.move = false;
             this.targetPos = new Vector(0, 0);
             this.vel = this.vel.add(this.acc);
@@ -64,7 +67,6 @@ public class PlayerObject {
             move = false;
             this.vel = new Vector(0,0);
         }
-
 
         this.pos = this.pos.add(this.vel);
         acc = new Vector(0,0);
