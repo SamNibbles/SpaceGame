@@ -12,23 +12,41 @@ public class PlanetHandler {
     private SunObject sunObject;
     private int planetsTotal = 5;
     private PlanetObject planets[] = new PlanetObject[planetsTotal];
+    private int planetNumber = -1;
 
     public PlanetHandler() {
         sunObject = new SunObject();
-        planets[0] = new PlanetObject(75, 5, 15, Color.GREEN);
-        planets[1] = new PlanetObject(150, 5, 15, Color.CYAN);
-        planets[2] = new PlanetObject(225, 5, 15, Color.RED);
-        planets[3] = new PlanetObject(300, 5, 15, Color.WHITE);
-        planets[4] = new PlanetObject(375, 5, 15, Color.BLUE);
+        planets[0] = new PlanetObject(75, 50, 30, Color.GREEN);
+        planets[1] = new PlanetObject(150, 50, 30, Color.CYAN);
+        planets[2] = new PlanetObject(225, 50, 30, Color.RED);
+        planets[3] = new PlanetObject(300, 50, 30, Color.WHITE);
+        planets[4] = new PlanetObject(375, 150, 30, Color.BLUE);
     }
 
     public void update() {
         sunObject.update();
         for (int i = 0; i < planetsTotal; i++) {
             planets[i].update();
-            planets[i].applyForce(sunObject.attract(planets[i]));
+            planets[i].applyForce(sunObject.attract(planets[i].pos, planets[i].mass));
         }
     }
+
+    public Vector attraction(Vector playerPos, int playerMass) {
+        for (int i = 0; i < planetsTotal; i++) {
+            if (Math.abs(playerPos.sub(planets[i].pos).x) < 50 && Math.abs(playerPos.sub(planets[i].pos).y) < 50)
+                planetNumber = i;
+                return planets[i].attract(playerPos, playerMass);
+        }
+        return new Vector(0, 0);
+    }
+
+//    public Boolean collision(Vector playerPos, int playerMass) {
+//        for (int i = 0; i < planetsTotal; i++) {
+//            if (Math.abs(playerPos.sub(planets[i].pos).x) < 50 && Math.abs(playerPos.sub(planets[i].pos).y) < 50)
+//                return true;
+//        }
+//        return false;
+//    }
 
     public void draw(Canvas canvas) {
         sunObject.draw(canvas);
