@@ -11,6 +11,7 @@ public class SunObject extends BasePlanet  {
     //Variables
 
     public SunObject() {
+        //The big 'old sun
         this.pos = new Vector(Constants.WIDTH / 2, Constants.HEIGHT / 2);
         this.color = Color.YELLOW;
         this.radius = 50;
