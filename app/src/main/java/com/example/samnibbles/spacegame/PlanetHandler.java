@@ -14,6 +14,10 @@ public class PlanetHandler {
     private PlanetObject planets[] = new PlanetObject[planetsTotal];
     private int planetNumber = -1;
 
+    //GETS & SETS
+    public int getPlanetNumber() {return planetNumber;}
+    public void setPlanetNumber(int planetNumber) {this.planetNumber = planetNumber;}
+
     public PlanetHandler() {
         sunObject = new SunObject();
         planets[0] = new PlanetObject(75, 50, 30, Color.GREEN);
@@ -31,22 +35,17 @@ public class PlanetHandler {
         }
     }
 
-    public Vector attraction(Vector playerPos, int playerMass) {
+    public void collision(Vector playerPos) {
         for (int i = 0; i < planetsTotal; i++) {
-            if (Math.abs(playerPos.sub(planets[i].pos).x) < 50 && Math.abs(playerPos.sub(planets[i].pos).y) < 50)
+            if (Math.abs(playerPos.sub(planets[i].pos).x) < 50 && Math.abs(playerPos.sub(planets[i].pos).y) < 50) {
                 planetNumber = i;
-                return planets[i].attract(playerPos, playerMass);
+            }
         }
-        return new Vector(0, 0);
     }
 
-//    public Boolean collision(Vector playerPos, int playerMass) {
-//        for (int i = 0; i < planetsTotal; i++) {
-//            if (Math.abs(playerPos.sub(planets[i].pos).x) < 50 && Math.abs(playerPos.sub(planets[i].pos).y) < 50)
-//                return true;
-//        }
-//        return false;
-//    }
+    public Vector attract(Vector playerPos, int playerMass) {
+        return planets[planetNumber].attract(playerPos, playerMass);
+    }
 
     public void draw(Canvas canvas) {
         sunObject.draw(canvas);
