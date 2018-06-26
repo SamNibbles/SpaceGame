@@ -14,6 +14,7 @@ public class PlanetHandler {
     private PlanetObject planets[] = new PlanetObject[planetsTotal];
 
     public PlanetHandler() {
+        //Create planets
         sunObject = new SunObject();
         planets[0] = new PlanetObject(75, 50, 30, Color.GREEN);
         planets[1] = new PlanetObject(150, 50, 30, Color.CYAN);
@@ -42,17 +43,33 @@ public class PlanetHandler {
         return -1;
     }
 
-    public Vector attraction(PlayerObject playerObject) {
-        //Gets attraction force from planet being orbited
-        if (playerObject.isAttracted() != -1) {
+    public Vector attract_force(PlayerObject playerObject){
+        //Returns force generated from planet instance attracted function
+        return planets[playerObject.getAttracted()].attract(playerObject.getPos(), playerObject.getMass());
+    }
 
-            playerObject.setVel(playerObject.getPos().perp(planets[playerObject.isAttracted()].pos));
-            double force = Math.sqrt((Constants.GRAVITY * planets[playerObject.isAttracted()].mass) / (planets[playerObject.isAttracted()].pos.sub(playerObject.getPos())).length()); //does stuff
+    public Vector getVel(int planetNum){
+        return planets[planetNum].getVel();
+    }
+
+    public Vector circ_orbit(PlayerObject playerObject) {
+        //Gets attraction force from planet being orbited
+        if (playerObject.getAttracted() != -1) {
+
+            //Set initial player velocity to unit vector perpendicular and tangential to planet being orbited
+            playerObject.setVel(playerObject.getPos().perp(planets[playerObject.getAttracted()].pos));
+
+            //Generate initial force to make player orbit
+            double force = Math.sqrt((Constants.GRAVITY * planets[playerObject.getAttracted()].mass) /
+                            (planets[playerObject.getAttracted()].pos.sub(playerObject.getPos())).length());
+
+            //Multiply unit vector velocity by force
             playerObject.setVel(playerObject.getVel().mul(force));
 
-            playerObject.setVel(playerObject.getVel().add(planets[playerObject.isAttracted()].getVel()));
+            //
+            playerObject.setVel(playerObject.getVel().add(planets[playerObject.getAttracted()].getVel()));
 
-            return planets[playerObject.isAttracted()].attract(playerObject.getPos(), playerObject.getMass());
+            return planets[playerObject.getAttracted()].attract(playerObject.getPos(), playerObject.getMass());
         } else
             return new Vector(0,0);
     }

@@ -27,7 +27,7 @@ public class PlayerObject {
     public int getMass() {return mass;}
     public void setMass(int mass) {this.mass = mass;}
 
-    public int isAttracted() {return attracted;}
+    public int getAttracted() {return attracted;}
     public void setAttracted(int attracted) {this.attracted = attracted;}
 
     public Vector getVel() {return vel;}
@@ -54,6 +54,7 @@ public class PlayerObject {
     }
 
     public void update() {
+        //If not attracted to a planet move to cursor target selection
         if (attracted != -1) {
             this.move = false;
             this.targetPos = new Vector(0, 0);
@@ -63,6 +64,7 @@ public class PlayerObject {
                 this.vel = this.targetPos.sub(this.pos).normalize().mul(10);
         }
 
+        //When close to target, end pursuit
         if (Math.abs(this.targetPos.sub(this.pos).x) < 5 && Math.abs(this.targetPos.sub(this.pos).y) < 5) {
             move = false;
             this.vel = new Vector(0,0);
