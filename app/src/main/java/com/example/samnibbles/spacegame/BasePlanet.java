@@ -27,7 +27,7 @@ public class BasePlanet {
         Vector force = this.pos.sub(objectPos).normalize();
         double distance = this.pos.sub(objectPos).length();
         double strength = G * this.mass * objectMass * distance / Math.pow(Math.abs(distance),3);
-        Math.min(Math.max(strength, 25), 5);
+        Math.min(Math.max(strength, 10), 5);
         force = force.mul(strength);
         return force;
     }

@@ -34,44 +34,25 @@ public class PlanetHandler {
         }
     }
 
-    public int inRange(Vector playerPos) {
+    public boolean inRange(Vector playerPos, int planetNum) {
         //Checks for first planet within range of 100, biased to planet 0 (inner planet)
-        for (int i = 0; i < planetsTotal; i++) {
-            if (Math.abs(playerPos.sub(planets[i].pos).x) < 100 && Math.abs(playerPos.sub(planets[i].pos).y) < 100)
-                return i; //Returns first planet within range as int
-        }
-        return -1;
+            if (Math.abs(playerPos.sub(planets[planetNum].pos).x) < 200 && Math.abs(playerPos.sub(planets[planetNum].pos).y) < 200)
+                return true;
+            else
+                return false;
+
     }
 
     public Vector attract_force(PlayerObject playerObject){
+        Vector total_force = new Vector(0,0);
+
+        for (int i = 0; i < planetsTotal; i++) {
+            if (inRange(playerObject.getPos(), i)){
+                total_force = total_force.add(planets[i].attract(playerObject.getPos(), playerObject.getMass()));
+            }
+        }
         //Returns force generated from planet instance attracted function
-        return planets[playerObject.getAttracted()].attract(playerObject.getPos(), playerObject.getMass());
-    }
-
-    public Vector getVel(int planetNum){
-        return planets[planetNum].getVel();
-    }
-
-    public Vector circ_orbit(PlayerObject playerObject) {
-        //Gets attraction force from planet being orbited
-        if (playerObject.getAttracted() != -1) {
-
-            //Set initial player velocity to unit vector perpendicular and tangential to planet being orbited
-            playerObject.setVel(playerObject.getPos().perp(planets[playerObject.getAttracted()].pos));
-
-            //Generate initial force to make player orbit
-            double force = Math.sqrt((Constants.GRAVITY * planets[playerObject.getAttracted()].mass) /
-                            (planets[playerObject.getAttracted()].pos.sub(playerObject.getPos())).length());
-
-            //Multiply unit vector velocity by force
-            playerObject.setVel(playerObject.getVel().mul(force));
-
-            //
-            playerObject.setVel(playerObject.getVel().add(planets[playerObject.getAttracted()].getVel()));
-
-            return planets[playerObject.getAttracted()].attract(playerObject.getPos(), playerObject.getMass());
-        } else
-            return new Vector(0,0);
+        return total_force;
     }
 
     public void draw(Canvas canvas) {

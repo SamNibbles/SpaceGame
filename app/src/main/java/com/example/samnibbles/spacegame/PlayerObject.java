@@ -18,7 +18,7 @@ public class PlayerObject {
     private int color;
     private Vector targetPos;
     private int attracted = -1;
-    private boolean move = false;
+    private boolean inPursuit = false;
 
     //GETS AND SETS
     public Vector getPos() {return pos;}
@@ -53,30 +53,37 @@ public class PlayerObject {
         this.acc = this.acc.add(f);
     }
 
+    public Vector getTargetUnitVec(){
+        return this.targetPos.sub(this.pos).normalize();
+    }
+
     public void update() {
         //If not attracted to a planet move to cursor target selection
-        if (attracted != -1) {
-            this.move = false;
-            this.targetPos = new Vector(0, 0);
-            this.vel = this.vel.add(this.acc);
-        } else {
-            if (move)
-                this.vel = this.targetPos.sub(this.pos).normalize().mul(10);
-        }
+
+        //Constrain accelerations
+        this.acc.x = Math.min(Math.max(this.acc.x, -5), 5);
+        this.acc.y = Math.min(Math.max(this.acc.y, -5), 5);
+
+        this.vel = this.vel.add(this.acc);
 
         //When close to target, end pursuit
-        if (Math.abs(this.targetPos.sub(this.pos).x) < 5 && Math.abs(this.targetPos.sub(this.pos).y) < 5) {
-            move = false;
-            this.vel = new Vector(0,0);
-        }
+        /*if (inPursuit) {
+            if (Math.abs(this.targetPos.sub(this.pos).x) < 5 && Math.abs(this.targetPos.sub(this.pos).y) < 5) {
+                this.vel = new Vector(0, 0);
+                this.targetPos = this.pos;
+                inPursuit = false;
+            }
+        }*/
 
         this.pos = this.pos.add(this.vel);
         acc = new Vector(0,0);
     }
 
     public void onTouchEvent(MotionEvent event) {
-        this.move = true;
+        this.inPursuit = true;
         this.targetPos = new Vector(event.getX() / scaleX, event.getY() / scaleY);
+        this.vel = new Vector(0,0);
+        this.applyForce(getTargetUnitVec().mul(20));
     }
 
     public void draw(Canvas canvas) {
